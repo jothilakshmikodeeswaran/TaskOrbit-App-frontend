@@ -7,7 +7,9 @@ import NavBar from "./components/Navbar";
 import Dashboard from "./pages/Dashboard";
 import ProjectsPage from "./pages/ProjectsPage";
 import ProjectDetailPage from "./pages/ProjectDetailPage";
-import TaskPage from "./pages/TasksPage";
+import TasksPage from "./pages/TasksPage";
+import EmployeePage from "./pages/EmployeePage";
+import TaskDetail from "./pages/TaskDetail";
 import './App.css';
 
 function App() {
@@ -22,8 +24,10 @@ function App() {
         <Route path='/signin' element={<SignINPage/>}/>        
        <Route path='/dashboard' element={<Dashboard/>}/>
         <Route path="/projects" element={<ProjectsPage />} />
+        <Route path="/tasks" element={<TasksPage />} />
+        <Route path="/tasks/:projectId" element={<TaskDetail />} />
         <Route path="/projects/:id" element={<ProjectDetailPage />} />
-        <Route path="/tasks" element={<TaskPage />} />
+        <Route path="/employees" element={<EmployeePage />} />        
       </Routes>
     </>
   )

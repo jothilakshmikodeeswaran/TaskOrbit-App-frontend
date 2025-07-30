@@ -1,6 +1,7 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { backendClient } from "../clients/backendClient";
+import MainLayout from "../components/MainLayout";
 
 function ProjectDetail() {
   const { id } = useParams();
@@ -26,6 +27,7 @@ function ProjectDetail() {
   if (!project) return <p className="text-center mt-8">Loading project details...</p>;
 
   return (
+    <MainLayout>
     <div className="max-w-3xl mx-auto bg-white p-6 mt-8 shadow rounded">
       <button
         onClick={() => navigate("/dashboard")}
@@ -40,6 +42,7 @@ function ProjectDetail() {
       <p className="mb-2"><strong>Progress:</strong> {project.progress}%</p>
       <p><strong>Deadline:</strong> {new Date(project.deadline).toLocaleDateString()}</p>
     </div>
+    </MainLayout>
   );
 }
 
