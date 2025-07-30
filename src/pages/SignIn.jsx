@@ -1,10 +1,10 @@
 import { useState } from "react";
 import { backendClient } from "../clients/backendClient";
 import { useNavigate } from "react-router-dom";
-
+import { useUser } from "../context/UserContext";
 function SignINPage() {
   const navigate = useNavigate();
-
+const { setCurrentUser } = useUser();
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -23,6 +23,7 @@ function SignINPage() {
       const res = await backendClient.post("/users/login", formData);
       console.log(res.data);
       localStorage.setItem("social-app-token", JSON.stringify(res.data.token));
+      setCurrentUser(res.data.user)
       navigate("/dashboard"); // navigate
     } catch (error) {
       console.log(error);
