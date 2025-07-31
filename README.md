@@ -1,12 +1,78 @@
-# React + Vite
+A full-stack project management dashboard for startups and teams — built with **React**, **Tailwind CSS**, **Node.js**, **Express**, and **MongoDB**.
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## 🚀 Features
 
-Currently, two official plugins are available:
+- 📊 **Dashboard Overview** with stats: active projects, tasks in progress, completed
+- 📁 **Projects Module** with status tracking and progress bars
+- ✅ **Tasks Module** with priority, due date, and status (To-do, In Progress, Done)
+- 👥 **Employees Directory** with role, status, and availability
+- ℹ️ **Company Pages**: About, Services, and Contact
+- 🔗 Fully integrated REST API
+- 🎨 Responsive and modern UI using Tailwind CSS
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+---
 
-## Expanding the ESLint configuration
+## 📂 Project Structure
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+project-management-app/
+├── frontend/ # React + Tailwind
+├── backend/ # Node.js + Express + MongoDB
+├── README.md
+├── .env (global optional)
+
+yaml
+Copy
+Edit
+
+---
+
+## 💻 Frontend (React + Vite + Tailwind)
+
+### 📁 Structure
+
+- `pages/` – Dashboard, Projects, Tasks, Employees, About, Services, Contact
+- `components/` – Sidebar, Cards, Forms
+- `services/` – Axios-based API utilities
+- `data/` – Mock sample data
+
+### 📦 Setup
+
+```bash
+cd frontend
+npm install
+npm run dev
+📄 Frontend .env
+bash
+Copy
+Edit
+VITE_API_URL=http://localhost:5000/api
+🔧 Backend (Node.js + Express)
+📁 Structure
+models/ – Mongoose schemas for Project, Task, Employee
+
+controllers/ – CRUD logic
+
+routes/ – RESTful APIs
+
+server.js – Entry point
+
+📦 Setup
+bash
+Copy
+Edit
+cd backend
+npm install
+npm run dev
+📄 Backend .env
+ini
+Copy
+Edit
+PORT=5000
+MONGO_URI=mongodb://localhost:27017/project-management
+JWT_SECRET=yourSuperSecretKey
+🛠 API Endpoints
+Resource	Endpoint	Method	Description
+Projects	/api/projects	GET	Fetch all projects
+/api/projects	POST	Create new project
+Tasks	/api/tasks	GET	Fetch all tasks
+Employees	/api/employees	GET	Fetch all employees

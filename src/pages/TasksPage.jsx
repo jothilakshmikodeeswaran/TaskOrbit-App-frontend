@@ -225,6 +225,7 @@ function TaskPage() {
             type="date"
             value={deadline}
             onChange={(e) => setDeadline(e.target.value)}
+            required
             className="w-full px-4 py-2 border rounded"
           />
 
@@ -267,7 +268,7 @@ function TaskPage() {
               <div className="mt-2 flex gap-2">
                 <button
                   onClick={() => handleEdit(task)}
-                  className="bg-yellow-400 px-3 py-1 rounded"
+                  className="bg-blue-500 px-3 py-1 rounded"
                 >
                   ✏️ Edit
                 </button>

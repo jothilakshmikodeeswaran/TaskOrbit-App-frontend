@@ -68,6 +68,10 @@ function EmployeePage() {
       }
       resetForm();
       fetchEmployees();
+      if (!formData.email.trim() || !formData.email.includes("@")) {
+        alert("Valid email is required");
+        return;
+      }
     } catch (error) {
       console.error("Submit error:", error);
     }
@@ -173,6 +177,7 @@ function EmployeePage() {
             name="joinedAt"
             value={formData.joinedAt}
             onChange={handleChange}
+            required
             className="w-full px-4 py-2 border rounded"
           />
 
@@ -207,13 +212,12 @@ function EmployeePage() {
               <p>
                 Status:{" "}
                 <span
-                  className={`font-semibold ${
-                    emp.status === "Online"
+                  className={`font-semibold ${emp.status === "Online"
                       ? "text-green-600"
                       : emp.status === "Busy"
-                      ? "text-yellow-600"
-                      : "text-red-600"
-                  }`}
+                        ? "text-yellow-600"
+                        : "text-red-600"
+                    }`}
                 >
                   {emp.status}
                 </span>
@@ -230,7 +234,7 @@ function EmployeePage() {
               <div className="mt-2 flex gap-2">
                 <button
                   onClick={() => handleEdit(emp)}
-                  className="bg-yellow-400 px-3 py-1 rounded"
+                  className="bg-blue-500 px-3 py-1 rounded"
                 >
                   ✏️ Edit
                 </button>

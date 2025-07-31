@@ -12,7 +12,7 @@ export const UserProvider = ({ children }) => {
 
     useEffect(() => {
         const token = JSON.parse(localStorage.getItem("social-app-token"))
-        console.log(token, "from userContext")
+        //console.log(token, "from userContext")
         if (token) {
             backendClient.get("/projects", {
                 headers: {
@@ -26,6 +26,7 @@ export const UserProvider = ({ children }) => {
 
     const logout = () => {
         localStorage.removeItem("social-app-token");
+        localStorage.removeItem("user-info");
         setCurrentUser(null);
         navigate("/");
     };

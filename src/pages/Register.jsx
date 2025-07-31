@@ -3,6 +3,7 @@ import { backendClient } from "../clients/backendClient.js";
 import { useNavigate, Link } from "react-router-dom";
 
 function RegisterPage() {
+  const [error, setError] = useState("");
   const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
@@ -13,7 +14,8 @@ function RegisterPage() {
   });
 
   const handleChange = (e) => {
-    setFormData({
+    setError("");
+    setFormData({      
       ...formData,
       [e.target.name]: e.target.value,
     });
@@ -25,10 +27,29 @@ function RegisterPage() {
       const res = await backendClient.post("/users/register", formData);
       console.log(res.data);
       localStorage.setItem("social-app-token", JSON.stringify(res.data.token));
-      navigate("/signin"); // navigate
+
+      if (!formData.username.trim()) {
+        alert("Username is required");
+        return;
+      }
+
+      // if (!formData.email.trim() || !formData.email.includes("@")) {
+      //   alert("Valid email is required");
+      //   return;
+      // }
+
+      // if (formData.password.length < 6) {
+      //   alert("Password must be at least 6 characters");
+      //   return;
+      // }
+
+      navigate("/signin");
     } catch (error) {
       console.log(error);
+      const errorMessage = error.response?.data?.message || error.response?.data?.errors || "Registration failed, please try again";
+setError(errorMessage);
     }
+
   };
   return (
     <main className="min-h-screen flex 
@@ -39,7 +60,11 @@ function RegisterPage() {
         <h1 className="text-2xl font-bold text-center mb-6 text-gray-800">
           Register Page
         </h1>
-
+{error && (
+  <div className="text-red-600 text-sm mb-4 text-center">
+    {error}
+  </div>
+)}
         <form onSubmit={handleSubmit} className="space-y-4">
           <input
             type="text"
@@ -47,6 +72,7 @@ function RegisterPage() {
             placeholder="User Name"
             value={formData.username}
             onChange={handleChange}
+            required
             className="w-full px-4 py-2 border rounded-md 
             focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
@@ -57,6 +83,7 @@ function RegisterPage() {
             placeholder="Email"
             value={formData.email}
             onChange={handleChange}
+            required
             className="w-full px-4 py-2 border rounded-md 
             focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
@@ -67,6 +94,7 @@ function RegisterPage() {
             placeholder="Password"
             value={formData.password}
             onChange={handleChange}
+            required
             className="w-full px-4 py-2 border rounded-md 
             focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
