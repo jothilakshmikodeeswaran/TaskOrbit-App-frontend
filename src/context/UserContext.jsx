@@ -1,5 +1,6 @@
 import { createContext, useState, useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
+import { backendClient } from "../clients/backendClient";
 const UserContext = createContext({
     currentUser: null
 });
@@ -7,9 +8,20 @@ const UserContext = createContext({
 export const UserProvider = ({ children }) => {
     const [currentUser, setCurrentUser] = useState(null);
     const [loading, setLoading] = useState(true);
-   const navigate = useNavigate();
-   
+    const navigate = useNavigate();
+
     useEffect(() => {
+        const token = JSON.parse(localStorage.getItem("social-app-token"))
+        console.log(token, "from userContext")
+        if (token) {
+            backendClient.get("/projects", {
+                headers: {
+                    Authorization: `Bearer ${JSON.parse(
+                        localStorage.getItem("social-app-token")
+                    )}`,
+                },
+            }).then((res) => { setCurrentUser(res.data) })
+        }
     }, []);
 
     const logout = () => {
@@ -29,8 +41,8 @@ export const UserProvider = ({ children }) => {
         <UserContext.Provider value={values}>
             {children}
         </UserContext.Provider>
-        );
-}   
+    );
+}
 
 // eslint-disable-next-line react-refresh/only-export-components
 export const useUser = () => {
