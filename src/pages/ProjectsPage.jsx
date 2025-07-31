@@ -7,7 +7,7 @@ import Dashboard from "./Dashboard";
 function ProjectPage() {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
-  const [status, setStatus] = useState("To-Do");
+  const [status, setStatus] = useState("");
   const [progress, setProgress] = useState(0);
   const [deadline, setDeadline] = useState("");
   const [projects, setProjects] = useState([]);
@@ -75,7 +75,7 @@ function ProjectPage() {
   const resetForm = () => {
     setName("");
     setDescription("");
-    setStatus("To-Do");
+    setStatus("");
     setProgress(0);
     setDeadline("");
     setEditId(null); // Reset edit mode
@@ -120,10 +120,11 @@ function ProjectPage() {
             className="w-full px-4 py-2 border rounded"
           />
 
-          <input
+          <textarea
             type="text"
             placeholder="Description"
             value={description}
+            required
             onChange={(e) => setDescription(e.target.value)}
             className="w-full px-4 py-2 border rounded"
           />
@@ -131,8 +132,12 @@ function ProjectPage() {
           <select
             value={status}
             onChange={(e) => setStatus(e.target.value)}
+            required
             className="w-full px-4 py-2 border rounded"
           >
+            <option value="" disabled hidden>
+              Enter Status
+            </option>
             <option value="To-Do">To-Do</option>
             <option value="In Progress">In Progress</option>
             <option value="Completed">Completed</option>

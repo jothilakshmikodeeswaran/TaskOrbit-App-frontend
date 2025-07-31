@@ -28,20 +28,20 @@ function ProjectDetail() {
 
   return (
     <MainLayout>
-    <div className="max-w-3xl mx-auto bg-white p-6 mt-8 shadow rounded">
-      <button
-        onClick={() => navigate("/dashboard")}
-        className="mb-4 bg-gray-300 hover:bg-gray-400 text-black font-medium py-2 px-4 rounded"
-      >
-        ← Back to Dashboard
-      </button>
+      <div className="max-w-3xl mx-auto bg-white p-6 mt-8 shadow rounded">
+        <button
+          onClick={() => navigate("/dashboard")}
+          className="mb-4 bg-gray-300 hover:bg-gray-400 text-black font-medium py-2 px-4 rounded"
+        >
+          ← Back to Dashboard
+        </button>
 
-      <h1 className="text-3xl font-bold mb-4">{project.name}</h1>
-      <p className="mb-2"><strong>Description:</strong> {project.description}</p>
-      <p className="mb-2"><strong>Status:</strong> {project.status}</p>
-      <p className="mb-2"><strong>Progress:</strong> {project.progress}%</p>
-      <p><strong>Deadline:</strong> {new Date(project.deadline).toLocaleDateString()}</p>
-    </div>
+        <h1 className="text-3xl font-bold mb-4">{project.name}</h1>
+        <p className="mb-2"><strong>Description:</strong> {project.description}</p>
+        <p className="mb-2"><strong>Status:</strong> {project.status}</p>
+        <p className="mb-2"><strong>Progress:</strong> {project.progress}%</p>
+        <p><strong>Deadline:</strong> {new Date(project.deadline).toLocaleDateString()}</p>
+      </div>
     </MainLayout>
   );
 }

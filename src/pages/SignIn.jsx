@@ -8,7 +8,7 @@ function SignINPage() {
   const [error, setError] = useState("");
   const navigate = useNavigate();
   const { setCurrentUser } = useUser();
-  
+
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -37,6 +37,7 @@ function SignINPage() {
       const res = await backendClient.post("/users/login", formData);
       console.log(res.data);
       localStorage.setItem("social-app-token", JSON.stringify(res.data.token));
+      localStorage.setItem("logged-in-user", JSON.stringify(res.data.user));
       setCurrentUser(res.data.user)
       navigate("/dashboard");
     } catch (error) {

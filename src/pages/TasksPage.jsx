@@ -6,8 +6,8 @@ import MainLayout from "../components/MainLayout";
 function TaskPage() {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
-  const [status, setStatus] = useState("To Do");
-  const [priority, setPriority] = useState("high");
+  const [status, setStatus] = useState("");
+  const [priority, setPriority] = useState("");
   const [project, setProject] = useState("");
   const [assignee, setAssignee] = useState("");
   const [deadline, setDeadline] = useState("");
@@ -139,14 +139,17 @@ function TaskPage() {
   const resetForm = () => {
     setTitle("");
     setDescription("");
-    setStatus("To Do");
-    setPriority("high");
+    setStatus("");
+    setPriority("");
     setProject("");
     setAssignee("");
     setDeadline("");
     setComments("");
     setEditId(null);
   };
+
+  const getToday = () => new Date().toISOString().split("T")[0];
+
   return (
     <MainLayout>
       <main>
@@ -186,6 +189,7 @@ function TaskPage() {
           <textarea
             placeholder="Description"
             value={description}
+            required
             onChange={(e) => setDescription(e.target.value)}
             className="w-full px-4 py-2 border rounded"
           />
@@ -193,8 +197,12 @@ function TaskPage() {
           <select
             value={status}
             onChange={(e) => setStatus(e.target.value)}
+            required
             className="w-full px-4 py-2 border rounded"
           >
+            <option value="" disabled hidden>
+              Enter Status
+            </option>
             <option value="To Do">To Do</option>
             <option value="In Progress">In Progress</option>
             <option value="Done">Done</option>
@@ -203,8 +211,12 @@ function TaskPage() {
           <select
             value={priority}
             onChange={(e) => setPriority(e.target.value)}
+            required
             className="w-full px-4 py-2 border rounded"
           >
+            <option value="" disabled hidden>
+              Enter Priority
+            </option>
             <option value="high">High</option>
             <option value="medium">Medium</option>
             <option value="low">Low</option>
@@ -213,9 +225,12 @@ function TaskPage() {
           <select
             value={assignee}
             onChange={(e) => setAssignee(e.target.value)}
+            required
             className="w-full px-4 py-2 border rounded"
           >
-            <option value="jothi">jothi</option>
+            <option value="" disabled hidden>
+              Enter Assignee
+            </option>
             {employees.map((e) => (
             <option key={e._id} value={e._id}>{e.name}</option>
           ))}
@@ -226,9 +241,11 @@ function TaskPage() {
             value={deadline}
             onChange={(e) => setDeadline(e.target.value)}
             required
+            min={getToday()}
             className="w-full px-4 py-2 border rounded"
+            
           />
-
+{/* <p className="text-sm text-gray-500 mt-1">Select a future deadline</p> */}
           <input
             type="text"
             placeholder="Comments"

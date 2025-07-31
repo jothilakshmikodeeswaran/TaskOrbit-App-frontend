@@ -15,7 +15,7 @@ function RegisterPage() {
 
   const handleChange = (e) => {
     setError("");
-    setFormData({      
+    setFormData({
       ...formData,
       [e.target.name]: e.target.value,
     });
@@ -24,14 +24,14 @@ function RegisterPage() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await backendClient.post("/users/register", formData);
-      console.log(res.data);
-      localStorage.setItem("social-app-token", JSON.stringify(res.data.token));
 
       if (!formData.username.trim()) {
         alert("Username is required");
         return;
       }
+      const res = await backendClient.post("/users/register", formData);
+      console.log(res.data);
+      localStorage.setItem("social-app-token", JSON.stringify(res.data.token));     
 
       // if (!formData.email.trim() || !formData.email.includes("@")) {
       //   alert("Valid email is required");
@@ -47,7 +47,7 @@ function RegisterPage() {
     } catch (error) {
       console.log(error);
       const errorMessage = error.response?.data?.message || error.response?.data?.errors || "Registration failed, please try again";
-setError(errorMessage);
+      setError(errorMessage);
     }
 
   };
@@ -60,11 +60,11 @@ setError(errorMessage);
         <h1 className="text-2xl font-bold text-center mb-6 text-gray-800">
           Register Page
         </h1>
-{error && (
-  <div className="text-red-600 text-sm mb-4 text-center">
-    {error}
-  </div>
-)}
+        {error && (
+          <div className="text-red-600 text-sm mb-4 text-center">
+            {error}
+          </div>
+        )}
         <form onSubmit={handleSubmit} className="space-y-4">
           <input
             type="text"

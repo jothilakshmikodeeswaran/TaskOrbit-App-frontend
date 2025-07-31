@@ -10,9 +10,9 @@ function EmployeePage() {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
-    role: "JuniorDeveloper",
-    sex: "Male",
-    status: "Online",
+    role: "",
+    sex: "",
+    status: "",
     profilepic: "",
     joinedAt: "",
     bio: "",
@@ -41,9 +41,9 @@ function EmployeePage() {
     setFormData({
       name: "",
       email: "",
-      role: "JuniorDeveloper",
-      sex: "Male",
-      status: "Online",
+      role: "",
+      sex: "",
+      status: "",
       profilepic: "",
       joinedAt: "",
       bio: "",
@@ -128,8 +128,12 @@ function EmployeePage() {
             name="role"
             value={formData.role}
             onChange={handleChange}
+            required
             className="w-full px-4 py-2 border rounded"
           >
+            <option value="" disabled hidden>
+              Enter Role
+            </option>
             <option value="Admin">Admin</option>
             <option value="Manager">Manager</option>
             <option value="vice-president">Vice President</option>
@@ -147,8 +151,12 @@ function EmployeePage() {
             name="sex"
             value={formData.sex}
             onChange={handleChange}
+            required
             className="w-full px-4 py-2 border rounded"
           >
+            <option value="" disabled hidden>
+              Enter sex
+            </option>
             <option value="Male">Male</option>
             <option value="Female">Female</option>
           </select>
@@ -156,8 +164,12 @@ function EmployeePage() {
             name="status"
             value={formData.status}
             onChange={handleChange}
+            required
             className="w-full px-4 py-2 border rounded"
           >
+            <option value="" disabled hidden>
+              Enter status
+            </option>
             <option value="Online">Online</option>
             <option value="Leave">Leave</option>
             <option value="Busy">Busy</option>
@@ -192,11 +204,13 @@ function EmployeePage() {
           <input
             type="submit"
             value={editId ? "UPDATE" : "ADD"}
-            className="w-full bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+            className="w-full bg-blue-500 text-white 
+            px-4 py-2 rounded hover:bg-blue-600"
           />
           <button
             onClick={() => navigate("/dashboard")}
-            className="mb-4 bg-gray-300 hover:bg-gray-400 text-black font-medium py-2 px-4 rounded"
+            className="mb-4 bg-gray-300 hover:bg-gray-400 
+            text-black font-medium py-2 px-4 rounded"
           >
             ← Back to Dashboard
           </button>
@@ -213,10 +227,10 @@ function EmployeePage() {
                 Status:{" "}
                 <span
                   className={`font-semibold ${emp.status === "Online"
-                      ? "text-green-600"
-                      : emp.status === "Busy"
-                        ? "text-yellow-600"
-                        : "text-red-600"
+                    ? "text-green-600"
+                    : emp.status === "Busy"
+                      ? "text-yellow-600"
+                      : "text-red-600"
                     }`}
                 >
                   {emp.status}

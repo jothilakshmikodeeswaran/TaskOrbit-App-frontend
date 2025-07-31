@@ -4,8 +4,11 @@ import logo from "../images/logo.png";
 
 function Sidebar() {
   const { currentUser, logout } = useUser();
+  const userRaw = localStorage.getItem("logged-in-user");
+  const user = userRaw ? JSON.parse(userRaw) : null;
+  const isAdmin = user?.role === "admin";
   //const navigate = useNavigate();
-  // const handleLogout = () => {
+  // const handleAdmin = () => {
   //   localStorage.removeItem("social-app-token");
   //   localStorage.removeItem("user-info");
 
@@ -37,9 +40,11 @@ function Sidebar() {
               <Link to="/tasks" className="block hover:underline">
                 ✅ Tasks
               </Link>
-              <Link to="/employees" className="block hover:underline">
-                👥 Employee Profile
-              </Link>
+              {isAdmin && (
+                <Link to="/employees" className="block hover:underline">
+                  👥 Employee Profile
+                </Link>
+              )}
             </nav>
             <p className="mt-10 text-sm">
               Welcome, <span className="font-medium"></span>

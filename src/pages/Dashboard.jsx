@@ -9,6 +9,10 @@ function Dashboard() {
   const [tasks, setTasks] = useState([]);
   const [employees, setEmployees] = useState([]);
 
+  const userRaw = localStorage.getItem("logged-in-user");
+  const user = userRaw ? JSON.parse(userRaw) : null;
+  const isAdmin = user?.role === "admin";
+
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -142,19 +146,22 @@ function Dashboard() {
         <section>
           <div className="mb-4 flex justify-between items-center">
             <h2 className="text-2xl font-bold">Employees</h2>
-            <button
-              onClick={() => navigate("/employees")}
-              className="bg-indigo-600 text-white px-4 py-2 rounded hover:bg-indigo-700"
-            >
-              ➕ Add Employee
-            </button>
+            {isAdmin && (
+              <button
+                onClick={() => navigate("/employees")}
+                className="bg-indigo-600 text-white px-4 py-2 rounded hover:bg-indigo-700"
+              >
+                ➕ Add Employee
+              </button>
+            )}
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {employees.map((emp) => (
               <div
                 key={emp._id}
-                className="bg-white p-4 shadow rounded-lg flex items-center gap-4 hover:scale-[1.01] transition-transform"
+                className="bg-white p-4 shadow rounded-lg flex 
+                items-center gap-4 hover:scale-[1.01] transition-transform"
               >
                 {emp.profilepic ? (
                   <img
@@ -163,7 +170,10 @@ function Dashboard() {
                     className="w-16 h-16 rounded-full object-cover"
                   />
                 ) : (
-                  <div className="w-16 h-16 rounded-full bg-gray-300 flex items-center justify-center">
+                  <div
+                    className="w-16 h-16 rounded-full bg-gray-300 
+                  flex items-center justify-center"
+                  >
                     <span className="text-gray-600 font-bold text-lg">?</span>
                   </div>
                 )}
