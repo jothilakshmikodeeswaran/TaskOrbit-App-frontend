@@ -165,10 +165,10 @@ function Dashboard() {
               >
                 {emp.profilepic ? (
                   <img
-                    src={emp.profilepic}
-                    alt={emp.name}
-                    className="w-16 h-16 rounded-full object-cover"
-                  />
+                src={emp.profilepic?.startsWith("http") ? emp.profilepic : "/images/jk.jpg"}
+                alt="Profile"
+                className="w-20 h-20 mt-2 rounded-full object-cover"
+              />
                 ) : (
                   <div
                     className="w-16 h-16 rounded-full bg-gray-300 

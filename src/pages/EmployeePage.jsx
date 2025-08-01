@@ -2,10 +2,13 @@ import { useEffect, useState } from "react";
 import { backendClient } from "../clients/backendClient";
 import { useNavigate } from "react-router-dom";
 import MainLayout from "../components/MainLayout";
+import axios from "axios";
 
 function EmployeePage() {
   const [employees, setEmployees] = useState([]);
   const [editId, setEditId] = useState(null);
+  const [selectedFile, setSelectedFile] = useState(null);
+  const [uploadStatus, setUploadStatus] = useState("");
 
   const [formData, setFormData] = useState({
     name: "",
@@ -19,7 +22,6 @@ function EmployeePage() {
   });
 
   const navigate = useNavigate();
-
   const token = JSON.parse(localStorage.getItem("social-app-token"));
 
   const fetchEmployees = async () => {
@@ -48,30 +50,75 @@ function EmployeePage() {
       joinedAt: "",
       bio: "",
     });
+    setSelectedFile(null);
+    setUploadStatus("");
     setEditId(null);
+    
   };
 
   const handleChange = (e) =>
     setFormData({ ...formData, [e.target.name]: e.target.value });
 
+  const handleFileChange = (e) => {
+    
+    setSelectedFile(e.target.files[0]);
+  };
+
+  const handleUpload = async () => {
+    if (!selectedFile) {
+      setUploadStatus("Please select a file to upload.");
+      return;
+    }
+
+    const data = new FormData();
+    data.append("profilepic", selectedFile);
+
+    try {
+      const response = await axios.post(
+        "http://localhost:3000/api/employees/upload-profilepic",
+        data,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      setFormData((prev) => ({
+        ...prev,
+        profilepic: response.data.imageUrl,
+      }));
+      setUploadStatus("Upload successful!");
+    } catch (error) {
+      console.error("Upload Error:", error);
+      setUploadStatus(
+        error.response?.status === 401
+          ? "Unauthorized. Check your token."
+          : "Upload failed. Try again."
+      );
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (!formData.email.trim() || !formData.email.includes("@")) {
+      alert("Valid email is required");
+      return;
+    }
+
     try {
-      if (editId) {
-        await backendClient.put(`/employees/${editId}`, formData, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-      } else {
-        await backendClient.post("/employees", formData, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-      }
+      const apiCall = editId
+        ? backendClient.put(`/employees/${editId}`, formData, {
+            headers: { Authorization: `Bearer ${token}` },
+          })
+        : backendClient.post("/employees", formData, {
+            headers: { Authorization: `Bearer ${token}` },
+          });
+
+      await apiCall;
       resetForm();
       fetchEmployees();
-      if (!formData.email.trim() || !formData.email.includes("@")) {
-        alert("Valid email is required");
-        return;
-      }
     } catch (error) {
       console.error("Submit error:", error);
     }
@@ -91,6 +138,7 @@ function EmployeePage() {
   const handleEdit = (emp) => {
     setFormData({ ...emp, joinedAt: emp.joinedAt?.split("T")[0] || "" });
     setEditId(emp._id);
+    setUploadStatus("");
   };
 
   return (
@@ -113,7 +161,6 @@ function EmployeePage() {
             required
             className="w-full px-4 py-2 border rounded"
           />
-
           <input
             type="email"
             name="email"
@@ -136,12 +183,12 @@ function EmployeePage() {
             </option>
             <option value="Admin">Admin</option>
             <option value="Manager">Manager</option>
-            <option value="vice-president">Vice President</option>
-            <option value="PrincipleDeveloper">Principal Developer</option>
+            <option value="Vice-President">Vice President</option>
+            <option value="PrincipalDeveloper">Principal Developer</option>
             <option value="SeniorDeveloper">Senior Developer</option>
             <option value="JuniorDeveloper">Junior Developer</option>
             <option value="QAEngineer">QA Engineer</option>
-            <option value="UI/UX-Desinger">UI/UX Designer</option>
+            <option value="UI/UX-Designer">UI/UX Designer</option>
             <option value="Support">Support</option>
             <option value="HR">HR</option>
             <option value="BusinessAnalyst">Business Analyst</option>
@@ -160,6 +207,7 @@ function EmployeePage() {
             <option value="Male">Male</option>
             <option value="Female">Female</option>
           </select>
+
           <select
             name="status"
             value={formData.status}
@@ -174,15 +222,6 @@ function EmployeePage() {
             <option value="Leave">Leave</option>
             <option value="Busy">Busy</option>
           </select>
-          <input
-            type="text"
-            name="profilepic"
-            placeholder="Profile picture URL"
-            value={formData.profilepic}
-            onChange={handleChange}
-            className="w-full px-4 py-2 border rounded"
-            disabled
-          />
 
           <input
             type="date"
@@ -192,7 +231,6 @@ function EmployeePage() {
             required
             className="w-full px-4 py-2 border rounded"
           />
-
           <textarea
             name="bio"
             placeholder="Short bio"
@@ -200,17 +238,20 @@ function EmployeePage() {
             onChange={handleChange}
             className="w-full px-4 py-2 border rounded"
           />
-
+          <input type="file" onChange={handleFileChange} />
+          <button type="button" onClick={handleUpload}>
+            Upload
+          </button>
+          <p className="text-sm italic">{uploadStatus}</p>
           <input
             type="submit"
             value={editId ? "UPDATE" : "ADD"}
-            className="w-full bg-blue-500 text-white 
-            px-4 py-2 rounded hover:bg-blue-600"
+            className="w-full bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
           />
           <button
+            type="button"
             onClick={() => navigate("/dashboard")}
-            className="mb-4 bg-gray-300 hover:bg-gray-400 
-            text-black font-medium py-2 px-4 rounded"
+            className="mb-4 bg-gray-300 hover:bg-gray-400 text-black font-medium py-2 px-4 rounded"
           >
             ← Back to Dashboard
           </button>
@@ -226,35 +267,34 @@ function EmployeePage() {
               <p>
                 Status:{" "}
                 <span
-                  className={`font-semibold ${emp.status === "Online"
-                    ? "text-green-600"
-                    : emp.status === "Busy"
+                  className={`font-semibold ${
+                    emp.status === "Online"
+                      ? "text-green-600"
+                      : emp.status === "Busy"
                       ? "text-yellow-600"
                       : "text-red-600"
-                    }`}
+                  }`}
                 >
                   {emp.status}
                 </span>
               </p>
               <p>Joined: {new Date(emp.joinedAt).toLocaleDateString()}</p>
               <p className="mt-1 italic text-gray-600">{emp.bio}</p>
-              {emp.profilepic && (
-                <img
-                  src={emp.profilepic}
-                  alt="Profile"
-                  className="w-20 h-20 mt-2 rounded-full object-cover"
-                />
-              )}
+              <img
+                src={emp.profilepic ? emp.profilepic : "/images/jk.jpg"}
+                alt="Profile"
+                className="w-20 h-20 mt-2 rounded-full object-cover"
+              />
               <div className="mt-2 flex gap-2">
                 <button
                   onClick={() => handleEdit(emp)}
-                  className="bg-blue-500 px-3 py-1 rounded"
+                  className="bg-blue-500 px-3 py-1 rounded text-white"
                 >
                   ✏️ Edit
                 </button>
                 <button
                   onClick={() => handleDelete(emp._id)}
-                  className="bg-red-500 px-3 py-1 text-white rounded"
+                  className="bg-red-500 px-3 py-1 rounded text-white"
                 >
                   🗑️ Delete
                 </button>
